@@ -12,7 +12,7 @@ now you make new directories whatever the fuck you want to just do it do *exit* 
   
 It creates and starts a container from the Ubuntu image and attaches my terminal to it, allowing interactive command execution inside an isolated Linux environment.
 5. docker ps -a :
-how many containers exist 
+how many containers exist (in exited state)
 6. running containers view 
 docker ps 
 7. docker start <container id>/<container name>:
@@ -38,7 +38,10 @@ mysql :8.0
 | C2   |    
 |      | 
  -------
-15. 
+15. docker run -d ubuntu sleep 1000 ,-d → Detached mode (runs in background)
+16.$ docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:8.0
+
+
 
 
 
