@@ -1,0 +1,44 @@
+1. in cmd - just run docker - to check if its installed or not 
+: docker
+2. :docker pull <image> | image from docker hub
+either pull or you can create your custom image and then push to docker 
+image has image id 
+3. docker run <image> to create container 
+container id uses image 
+4. docker run -it <image> to run interactive mode - allow us to access run and execute *container terminal* to i/p and o/p thing.
+eg docker run -it ubuntu 
+you will enter to ubuntu container terminal from your host (remote) windows cmd 
+now you make new directories whatever the fuck you want to just do it do *exit* babes from container - so container can stop
+  
+It creates and starts a container from the Ubuntu image and attaches my terminal to it, allowing interactive command execution inside an isolated Linux environment.
+5. docker ps -a :
+how many containers exist 
+6. running containers view 
+docker ps 
+7. docker start <container id>/<container name>:
+restart the existing container 
+8. docker stop
+9. docker rmi <image> to remove or destroy any image
+10. docker rm <cont_name>
+11. docker images 
+12. to delete the image - first delete the cont.(10->9)
+13. docker pull mysql:8.0 (otherwise latest v)
+-----Layers of image-----
+14.mysql (latest v)   
+    |               
+    v                
+ ------           
+| C1   |    ---diff version of mysql
+|      | 
+ -------
+mysql :8.0
+   |
+   v
+ ------           
+| C2   |    
+|      | 
+ -------
+15. 
+
+
+
