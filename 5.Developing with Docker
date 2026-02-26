@@ -1,0 +1,54 @@
+1️⃣Docker Network
+Docker Network allows:
+Containers to communicate with each other internally
+Without exposing ports to host machine.(or to each other c2c)
+with help of isolated networks.
+
+🧠 Default Network Types in Docker
+
+Docker provides 3 main network drivers:
+
+Network   	Purpose
+bridge    	Default, container-to-container communication
+host	      Uses host network directly
+none	      No network
+
+🎯 Port binding using -p is required only when exposing a container service to the host machine. 
+Containers on the same Docker network communicate internally using private IPs and Docker’s internal DNS, so no port binding is needed between them.
+
+📦 How This Works Internally
+No -p needed.
+Because:
+Docker creates virtual bridge
+Assigns private IPs
+Provides internal DNS
+Containers talk using name → IP mapping
+This is internal networking.
+
+There is still a port inside the container.
+Example:
+nginx runs on port 80.
+
+But:
+Containers directly access container_name:80
+No host port mapping required
+
+Command:
+C:\Users\RANJEETA PATHAK>docker network ls
+NETWORK ID     NAME      DRIVER    SCOPE
+75c1b716e779   bridge    bridge    local
+3596e60f0374   host      host      local
+687e928c58a1   none      null      local
+
+C:\Users\RANJEETA PATHAK>docker network create mongo-network
+52b61f9e1d9f8ad21f8eceaa5d4bea9354d8e891597907b462b66890e46c0866
+
+C:\Users\RANJEETA PATHAK>docker network ls
+NETWORK ID     NAME            DRIVER    SCOPE
+75c1b716e779   bridge          bridge    local
+3596e60f0374   host            host      local
+52b61f9e1d9f   mongo-network   bridge    local
+687e928c58a1   none            null      local
+
+C:\Users\RANJEETA PATHAK>
+
