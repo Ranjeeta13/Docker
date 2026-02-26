@@ -1,16 +1,43 @@
 1. in cmd - just run docker - to check if its installed or not 
 : docker
-2. :docker pull <image> | image from docker hub
+2. docker pull <image> | image from docker hub
 either pull or you can create your custom image and then push to docker 
 image has image id 
 3. docker run <image> to create container 
 container id uses image 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 4. docker run -it <image> to run interactive mode - allow us to access run and execute *container terminal* to i/p and o/p thing.
-eg docker run -it ubuntu 
+example:
+🐳 Using Git Inside a Docker Container
+🐳docker run -it ubuntu 
 you will enter to ubuntu container terminal from your host (remote) windows cmd 
-now you make new directories whatever the fuck you want to just do it do *exit* babes from container - so container can stop
-  
+now you make new directories whatever you want to do just do it, do *exit* babes from container - so container can stop 
 It creates and starts a container from the Ubuntu image and attaches my terminal to it, allowing interactive command execution inside an isolated Linux environment.
+🎯
+The command docker run -it ubuntu creates and starts a new container from the Ubuntu image and attaches my local terminal to the container’s STDIN and STDOUT. 
+The -i flag keeps input open, and -t allocates a pseudo-terminal. This allows me to interact with the container’s shell in an isolated Linux environment.
+When I type exit, the shell process stops, and since it was the main process, the container also stops.
+
+🔥 👉 A container runs as long as its main process (PID 1) runs.
+In this case:
+
+Main process = /bin/bash
+When you type: exit
+Bash terminates->PID 1 stops->Container stops
+
+⚠️ Important Clarification
+If you run: 
+docker run -it ubuntu -> and then inside container you create directories:
+mkdir test
+Those changes exist inside that container only, not on host.
+
+Unless you use:
+-v host_dir:container_dir
+(volume mounting)
+
+🚀 What If You Forget -it?
+docker run ubuntu---> Container starts and exits immediately because there is no interactive terminal.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 5. docker ps -a :
 how many containers exist (in exited state)
 6. running containers view 
@@ -40,6 +67,13 @@ mysql :8.0
  -------
 15. docker run -d ubuntu sleep 1000 ,-d → Detached mode (runs in background)
 16.$ docker run --name some-mysql -e MYSQL_ROOT_PASSWORD=my-secret-pw -d mysql:8.0
+17. Port Binding command:
+docker run --name mysql9 -p8080:3306 -e MYSQL_ROOT_PASSWORD=secret -d mysql:9
+
+Troubleshoot commands
+18.docker logs <container_id>
+19. docker exce -it <cont_id> /bin/bash   or alternatively we have /bin/sh
+exce cmd allows us to run additional commands on existing already running container 
 
 
 
