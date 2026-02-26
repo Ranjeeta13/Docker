@@ -80,7 +80,7 @@ Each instruction creates a new layer.
 
 🧩 Is It The Whole Application?
 
-Depends on what image you pull.
+Depends on what image you pull
 
 Ubuntu image → only OS
 Mongo image → full database server
@@ -98,7 +98,6 @@ Image = Blueprint
 Container = Running instance
 
 Just like:
-
 Class = Blueprint
 Object = Running instance
 
@@ -115,10 +114,17 @@ Each one is separate container.
 🚀 Very Important Concept
 
 Images are:
-
 Immutable and Read-only
 
 Containers:
-
 Are writable and Can change state
+
+--- Docker Image Layers ---
+
+{can be written here, while in images you can't write -only readable}
+   |
+   v
+Container - Layer 2- Layer 1 - Base Layer
+(top)                          (bottom)
+
 
