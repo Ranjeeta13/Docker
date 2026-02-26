@@ -1,0 +1,165 @@
+🧠 What Is a Kernel?
+
+The kernel is the core part of an operating system.
+It acts as a bridge between:
+Applications  ↔  Hardware
+Applications cannot directly talk to hardware.They must go through the kernel.
+
+🏗️ Simple Architecture
+Application (Chrome, Java, MySQL)
+↓
+Kernel (Linux / Windows Kernel)
+↓
+Hardware (CPU, RAM, Disk, Network)
+
+🖥️ Traditional System Architecture
+Application Layer -> Host OS kernel-> Hardware 
+Applications directly use: System calls, OS kernel services and Drivers
+
+🐳 Docker Architecture
+Applications (inside containers)
+↓
+Docker Engine
+↓
+Host OS Kernel (shared)
+↓
+Hardware
+
+🔑 Key Point:
+Docker does NOT include its own kernel.
+It uses:
+👉 The host machine’s kernel
+
+Containers share the same kernel but are isolated using: Namespaces, cgroups and Union file systems
+
+💻 Virtual Machine Architecture
+Applications
+↓
+Guest OS (Full OS with its own Kernel)
+↓
+Hypervisor
+↓
+Host OS
+↓
+Hardware
+
+Each VM contains:
+Full OS
+Separate kernel
+System libraries
+
+⚡ Why Docker Is Lightweight
+Docker:
+Shares host kernel
+No separate OS
+Image size: MBs
+Starts in seconds
+
+VM:
+Includes full OS
+Separate kernel
+Image size: GBs
+Takes minutes to boot
+
+🧠 Deep Technical Explanation
+1️⃣ Kernel Sharing
+
+Docker uses Linux kernel features:
+namespaces → process isolation
+cgroups → resource control
+overlayfs → layered filesystem
+So container = isolated process.
+
+VM = fully virtualized machine.
+
+2️⃣ Why Docker Is Faster
+
+Because:                                  VM must:
+No OS boot process                        Boot OS
+Just starts a process         while       Initialize drivers
+Uses existing kernel                      Start services
+
+docker irrespective of which machine uses host os kernel and only virtualize the app layer
+That means:
+Linux container requires Linux kernel.
+but in Virtual Machine : 
+virtualizes both app layer and host os kernel 
+hence docker is lightweight and small in size and faster and VM is in GBs
+ 
+🪟 Why Docker on Windows/Mac Is Different
+VM is compatible with all underlying OS 
+but docker was built on Linux OS , so desktop docker comes here 
+Docker Desktop does this:
+
+Windows/macOS
+↓
+Lightweight Linux VM
+↓
+Docker Engine
+↓
+Containers
+
+So actually:
+
+On Windows/Mac → Docker runs inside a hidden Linux VM.
+On Linux → Docker runs directly on host kernel.
+
+docker is best on linux than windows and mac
+
+🧨 Docker Disadvantages
+1️⃣ OS Dependency
+Linux containers need Linux kernel.
+You cannot run Windows container on Linux easily.
+(Except using special modes)
+
+2️⃣ Less Isolation Than VM
+VM:
+Strong isolation
+Separate kernel
+
+Container:
+Shares kernel
+
+Kernel vulnerability affects all containers
+
+3️⃣ Not Ideal For Different OS Testing
+
+VM can run:
+Linux on Windows
+Windows on Linux
+
+Different kernel versions
+Docker cannot change kernel.
+
+🏗️ When To Use What?
+Use Case	               Docker    	VM
+Microservices             ✅	      ❌
+CI/CD pipelines	          ✅	      ❌
+Full OS testing	          ❌     	  ✅
+Strong isolation/security	⚠️	      ✅
+Lightweight deployment	  ✅	      ❌
+
+🎯Docker uses OS-level virtualization, meaning containers share the host’s kernel and isolate only the application layer. 
+In contrast, virtual machines use hardware-level virtualization, where each VM contains a full guest OS and kernel. 
+Because Docker does not need to boot a full OS, it is lightweight, faster, and smaller in size.
+However, Docker is dependent on the host kernel, while VMs provide stronger isolation and cross-OS compatibility.
+
+🔥
+Docker does NOT include a kernel.
+It depends on:
+👉 The host's Linux kernel.
+
+That’s why:
+Linux containers run natively on Linux.
+On Windows/macOS, Docker runs inside a small Linux VM.
+
+🧠 Real Example
+
+If your host OS is:
+Ubuntu
+Then Docker containers use Ubuntu’s Linux kernel.
+
+If host is:
+Windows
+Docker Desktop runs a Linux VM to provide Linux kernel.
+
