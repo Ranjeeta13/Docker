@@ -1,0 +1,352 @@
+🐳 Docker + Git + Team Collaboration Guide
+
+Complete understanding of how Docker works in team development with Spring Boot applications.
+
+📌 1️⃣ Core Responsibilities
+Concern	Tool Responsible
+Dependency conflicts	🐳 Docker
+Environment consistency	🐳 Docker
+Code collaboration	🌿 Git
+Merge conflicts	🌿 Git
+Deployment	🐳 Docker
+Scaling	☸️ Kubernetes
+🧠 Why Developers Use Docker
+
+Developers use Docker to:
+
+✅ Ensure same runtime environment
+
+✅ Avoid dependency conflicts
+
+✅ Run full backend ecosystem locally
+
+✅ Match production environment
+
+✅ Simplify onboarding
+
+✅ Run infrastructure services easily
+
+🏗 Running Full Backend Ecosystem
+
+A Spring Boot application rarely runs alone.
+
+It may depend on:
+
+🗄 MySQL
+
+⚡ Redis
+
+📨 Kafka
+
+🔎 Elasticsearch
+
+🔁 Other microservices
+
+Without Docker:
+
+Manual installation
+
+Version mismatch
+
+Port conflicts
+
+Configuration issues
+
+With Docker:
+
+docker compose up
+
+🔥 Entire system starts instantly.
+
+📦 Example docker-compose.yml
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  redis:
+    image: redis
+
+Every developer runs identical infrastructure.
+
+🏛 Architecture Overview
+🔹 Development Architecture
+Developer
+   │
+   ▼
+Git Repository
+   │
+   ▼
+Clone Project
+   │
+   ▼
+docker build
+   │
+   ▼
+Docker Image
+   │
+   ▼
+docker run / docker compose up
+   │
+   ▼
+Containers Running (App + DB + Cache + Services)
+Explanation
+
+Developer clones code from Git.
+
+Docker builds image using Dockerfile.
+
+Image contains:
+
+OS layer
+
+JDK
+
+Dependencies
+
+Built JAR
+
+Containers run from that image.
+
+All services communicate inside Docker network.
+
+🔹 CI/CD + Production Architecture
+Developer → Git Push
+              │
+              ▼
+          CI/CD Pipeline
+              │
+              ▼
+        Docker Build
+              │
+              ▼
+      Push Image to Docker Hub
+              │
+              ▼
+          Production Server
+              │
+              ▼
+         Container Running
+Explanation
+
+Code changes go to Git.
+
+CI builds Docker image.
+
+Image pushed to Docker Hub.
+
+Production pulls image.
+
+Container runs.
+
+Containers are never modified manually in production.
+
+🐳 Docker Image vs Container
+Image	Container
+Blueprint	Running instance
+Read-only	Writable layer
+Stored permanently	Temporary
+Versioned	Ephemeral
+
+⚠ Containers are immutable in professional workflows.
+
+🔁 Proper Development Workflow
+
+If teammate wants to modify code:
+
+Clone Git repository
+
+Modify source code
+
+Commit & push
+
+Build new Docker image
+
+Run container
+
+docker build -t springboot-dev .
+docker run -p 8080:8080 springboot-dev
+🛠 What Happens During docker build
+docker build -t springboot-dev .
+Internally:
+
+1️⃣ Docker reads Dockerfile
+2️⃣ Pulls base image (if not present)
+3️⃣ Copies project files
+4️⃣ Executes build commands (e.g., Maven)
+5️⃣ Creates new image
+
+The build happens inside an isolated container environment.
+
+No dependency conflicts.
+
+🛠 What Happens During docker run
+docker run -p 8080:8080 springboot-dev
+
+Docker:
+
+Creates container from image
+
+Executes ENTRYPOINT
+
+Starts Spring Boot app
+
+Example:
+
+ENTRYPOINT ["java","-jar","app.jar"]
+🔥 Multi-Stage Build (Production Best Practice)
+# Stage 1 - Build
+FROM maven:3.9-eclipse-temurin-17 AS build
+WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
+
+# Stage 2 - Runtime
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
+COPY --from=build /app/target/app.jar app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
+Benefits
+
+Smaller image
+
+No Maven in runtime
+
+More secure
+
+Optimized for production
+
+🔒 Container Changes (Important)
+
+Yes, you can enter a container:
+
+docker exec -it <container_id> bash
+
+But:
+
+Changes are temporary
+
+Not version-controlled
+
+Lost when container is removed
+
+Proper way:
+Modify source code → Rebuild image → Run container.
+
+🌿 Merge Conflicts
+
+Merge conflicts occur in Git, not Docker.
+
+Example:
+
+<<<<<<< HEAD
+return "Ranjeeta";
+=======
+return "Team Member";
+>>>>>>> branch-name
+
+Resolved manually in Git.
+
+Docker does not handle code merging.
+
+🧩 Dependency Conflict Clarification
+If teammate pulls Docker image:
+docker pull ranjeeta/springboot-app
+docker run ranjeeta/springboot-app
+
+✅ No dependency conflict
+Because image already contains:
+
+JDK
+
+OS
+
+Dependencies
+
+Compiled JAR
+
+If teammate clones Git and runs without Docker:
+
+⚠ Conflicts possible due to:
+
+Different JDK version
+
+Different Maven version
+
+Different DB version
+
+Different OS
+
+Docker prevents this by freezing environment.
+
+📡 Docker Networking
+
+In docker-compose:
+
+Services communicate using service name:
+
+services:
+  app:
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql
+
+Inside Spring Boot:
+
+spring.datasource.url=jdbc:mysql://mysql:3306/db
+
+mysql acts as hostname automatically.
+
+💾 Data Persistence (Important)
+
+Without volumes:
+
+docker run mysql
+
+Delete container → Data lost.
+
+With volume:
+
+docker run -v mysql_data:/var/lib/mysql mysql
+
+Data persists even if container is removed.
+
+🎯 Final Understanding
+
+🐳 Docker = Immutable environment + Deployment artifact
+🌿 Git = Code collaboration + Version control
+
+Containers should be treated as immutable.
+All changes must happen in source code → rebuild image → run container.
+
+🚀 Professional Summary
+
+Docker ensures:
+
+Environment consistency
+
+Zero dependency conflicts (when pulling image)
+
+Fast onboarding
+
+Production parity
+
+Infrastructure simulation
+
+Git ensures:
+
+Code collaboration
+
+Branching strategy
+
+Merge conflict resolution
+
+Both work together — not replace each other.
