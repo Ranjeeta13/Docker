@@ -1,0 +1,161 @@
+1️⃣ You Didn’t Mention Docker Layers (VERY IMPORTANT)
+
+Docker images are built in layers.
+
+Each Dockerfile instruction creates a layer:
+
+FROM maven:3.9
+WORKDIR /app
+COPY . .
+RUN mvn clean package
+
+Each line = one layer.
+
+Why important?
+
+Docker caches layers
+
+Faster rebuilds
+
+Optimized images
+
+Interviewers LOVE this concept.
+
+Add this to notes:
+
+Docker images are layered. Each instruction in Dockerfile creates a new layer, and Docker caches these layers to optimize rebuild time.
+
+2️⃣ You Didn’t Mention Volumes vs Bind Mount Clearly
+
+You mentioned:
+
+docker run -v $(pwd):/app
+
+But add this clarity:
+
+There are two types:
+
+Bind Mount → local folder mapped to container
+
+Named Volume → managed by Docker
+
+This matters when discussing persistence (like MySQL data).
+
+3️⃣ You Didn’t Clearly Mention Data Persistence Problem
+
+If someone runs MySQL container without volume:
+
+Data will be lost when container is removed.
+
+Example:
+
+docker run mysql
+
+Delete container → DB gone.
+
+Correct way:
+
+docker run -v mysql_data:/var/lib/mysql mysql
+
+This is critical for backend devs.
+
+4️⃣ You Slightly Mixed Two Development Styles
+
+There are actually 2 dev workflows:
+
+Style A – Build inside Docker
+
+Dockerfile runs mvn clean package.
+
+Style B – Build outside, run jar in Docker
+
+You run:
+
+mvn clean package
+
+Then Dockerfile:
+
+FROM openjdk:17
+COPY target/app.jar app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
+
+Both valid — but used differently.
+
+This distinction is important in real projects.
+
+5️⃣ You Didn’t Mention Networking Between Containers
+
+In docker-compose:
+
+Services can talk using service name:
+
+services:
+  app:
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql
+
+Inside app config:
+
+spring.datasource.url=jdbc:mysql://mysql:3306/db
+
+mysql is hostname automatically.
+
+That’s powerful and important.
+
+6️⃣ One Important Clarification
+
+You wrote:
+
+No dependency conflict if pulling same image
+
+Correct.
+
+But small nuance:
+
+If teammate builds locally using Dockerfile,
+dependency resolution still happens during Maven build.
+So conflicts can still occur if:
+
+pom.xml changes
+
+Maven Central version changes
+
+Docker doesn't freeze Maven repository state.
+Only image pull freezes environment fully.
+
+That nuance is advanced-level understanding.
+
+7️⃣ Missing: Why Containers Are Lightweight
+
+You didn’t mention:
+
+Containers share host OS kernel.
+VMs run full OS.
+
+This is core conceptual difference.
+
+Interviewers ask this often.
+
+🧠 What You Have Now
+
+You understand Docker at:
+
+🟢 Strong Junior
+🟢 Early Mid-level
+🟡 Not yet deep DevOps
+
+To become advanced, next you should learn:
+
+Linux namespaces
+
+cgroups
+
+Overlay filesystem
+
+Docker networking internals
+
+CI/CD integration
+
+Kubernetes basics
