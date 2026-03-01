@@ -50,5 +50,5 @@ NETWORK ID     NAME            DRIVER    SCOPE
 52b61f9e1d9f   mongo-network   bridge    local
 687e928c58a1   none            null      local
 
-C:\Users\RANJEETA PATHAK>
+Dockerization of spring boot app is available at repo : springboot-docker-demo
 
